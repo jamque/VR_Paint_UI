@@ -30,4 +30,10 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	UMotionControllerComponent* MotionController;
+
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMesh* MeshLeft;
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMesh* MeshRight;
+
 };

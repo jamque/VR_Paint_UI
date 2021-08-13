@@ -12,7 +12,9 @@ AVRAController::AVRAController()
 
 	MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionComponent"));
 	SetRootComponent(MotionController);
-	MotionController->bDisplayDeviceModel = true;
+	// For Oculus Quest must be setted with StaticMesh
+	MotionController->SetShowDeviceModel(true);
+	MotionController->SetDisplayModelSource(UMotionControllerComponent::CustomModelSourceId);
 
 }
 
@@ -33,4 +35,12 @@ void AVRAController::Tick(float DeltaTime)
 void AVRAController::SetHand(FName Hand)
 {
 	MotionController->SetTrackingMotionSource(Hand);
+	if (Hand == FName(TEXT("Left")))
+	{
+		MotionController->SetCustomDisplayMesh(MeshLeft);
+	}
+	if (Hand == FName(TEXT("Right")))
+	{
+		MotionController->SetCustomDisplayMesh(MeshRight);
+	}
 }

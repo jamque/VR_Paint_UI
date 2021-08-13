@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "VRAController.h"
 
+#include "HeadMountedDisplayFunctionLibrary.h"
+
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -25,6 +27,8 @@ AVRPawn::AVRPawn()
 void AVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Floor);
 
 	if (HandTypeController)
 	{
