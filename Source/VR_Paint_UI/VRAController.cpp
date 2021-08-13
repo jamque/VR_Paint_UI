@@ -4,6 +4,8 @@
 #include "VRAController.h"
 #include "MotionControllerComponent.h"
 
+#include "Stroke.h"
+
 // Sets default values
 AVRAController::AVRAController()
 {
@@ -22,14 +24,29 @@ AVRAController::AVRAController()
 void AVRAController::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void AVRAController::ButtonPressed()
+{
+	FTransform TR;
+	TR.SetTranslation(GetActorLocation());
+	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeToPaint,TR);
+	CurrentStroke->SetOwner(this);
+}
+
+void AVRAController::ButtonRelease()
+{
+	CurrentStroke = nullptr;
 }
 
 // Called every frame
 void AVRAController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (CurrentStroke != nullptr) // Only update if there is some stroke.
+	{
+		CurrentStroke->Update(GetActorLocation());
+	}
 }
 
 void AVRAController::SetHand(FName Hand)

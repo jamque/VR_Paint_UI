@@ -7,6 +7,7 @@
 #include "VRAController.generated.h"
 
 class UMotionControllerComponent;
+class AStroke;
 
 UCLASS()
 class VR_PAINT_UI_API AVRAController : public AActor
@@ -16,6 +17,9 @@ class VR_PAINT_UI_API AVRAController : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AVRAController();
+
+	void ButtonPressed();
+	void ButtonRelease();
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,5 +39,10 @@ protected:
 	UStaticMesh* MeshLeft;
 	UPROPERTY(EditDefaultsOnly)
 	UStaticMesh* MeshRight;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AStroke> StrokeToPaint;
+
+	AStroke* CurrentStroke;
 
 };

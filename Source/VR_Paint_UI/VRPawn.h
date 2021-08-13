@@ -24,6 +24,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	void RightTriggerPressed();
+	void RightTriggerReleased();
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* VRRoot;
