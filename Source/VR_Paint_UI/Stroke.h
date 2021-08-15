@@ -22,6 +22,11 @@ public:
 private:
 	void CreateSpline(FVector StartPoint);
 
+	/* Has lecture done*/
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* Root;
+	/*****/
+
 	UPROPERTY(VisibleAnywhere)
 	TArray<USplineMeshComponent*> DynamicMeshArray;
 
