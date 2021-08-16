@@ -6,8 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Stroke.generated.h"
 
-class USplineMeshComponent;
-class UMaterialInterface;
+class UInstancedStaticMeshComponent;
 
 UCLASS()
 class VR_PAINT_UI_API AStroke : public AActor
@@ -22,19 +21,11 @@ public:
 private:
 	void CreateSpline(FVector StartPoint);
 
-	/* Has lecture done*/
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
-	/*****/
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<USplineMeshComponent*> DynamicMeshArray;
-
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMesh* Mesh;
-
-	UPROPERTY(EditDefaultsOnly)
-	UMaterialInterface* Material;
+	UInstancedStaticMeshComponent * StrokeMeshInstanced;
 
 	FVector LastLocation;
 };

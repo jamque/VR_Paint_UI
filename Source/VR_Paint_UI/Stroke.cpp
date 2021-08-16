@@ -1,23 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Stroke.h"
-
-#include "Components/SplineMeshComponent.h"
+#include "Components/InstancedStaticMeshComponent.h"
 
 // Sets default values
 AStroke::AStroke()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	DynamicMeshArray.Empty();
 
-	/* Has we done*/
-	// No Root component
-	/* Has lecture done*/
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
-	/*****/
+
+	StrokeMeshInstanced = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Stroke Mesh"));
+	StrokeMeshInstanced->SetupAttachment(Root);
 
 	LastLocation = FVector(0.0f);
 }
@@ -45,17 +41,7 @@ void AStroke::Update(FVector CursorLocation)
 
 void AStroke::CreateSpline(FVector StartPoint)
 {
-	USplineMeshComponent* DynamicMesh = NewObject<USplineMeshComponent>(this);
-	/* Has we done*/
-	// DynamicMesh->SetMobility(EComponentMobility::Static);
-	/* Has lecture done*/
-	DynamicMesh->SetMobility(EComponentMobility::Movable);
-	DynamicMesh->AttachToComponent(Root, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	/*****/
-	DynamicMesh->SetStaticMesh(Mesh);
-	DynamicMesh->SetMaterial(0, Material);
-	DynamicMesh->SetStartAndEnd(LastLocation, FVector(0.0f), StartPoint, FVector(0.0f));
-	DynamicMesh->SetVisibility(true);
-	DynamicMesh->RegisterComponent();
-	DynamicMeshArray.Add(DynamicMesh);
+	FTransform TR;
+	TR.SetLocation(StartPoint);
+	StrokeMeshInstanced->AddInstance(TR);
 }

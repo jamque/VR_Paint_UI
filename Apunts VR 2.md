@@ -118,9 +118,18 @@ Implement The Algoritth
 - Their endpoints ahould match up
 - You should be able to draw
 
-This is not the solution in video. This Solution do not attach SplineMesh to Actor.
+This Solution attach SplineMesh to Actor and its similar to the lecture, but it's not the same code.
 
 ```c
+
+// In .h
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* Root;
+
+//In constructor
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(Root);
+
 void AVRAController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -132,6 +141,7 @@ void AVRAController::Tick(float DeltaTime)
 
 void AStroke::Update(FVector CursorLocation)
 {
+	CursorLocation = GetActorTransform().InverseTransformPosition(CursorLocation);
 	if (LastLocation.IsZero())
 	{
 		LastLocation = CursorLocation;
@@ -147,7 +157,8 @@ void AStroke::Update(FVector CursorLocation)
 void AStroke::CreateSpline(FVector StartPoint)
 {
 	USplineMeshComponent* DynamicMesh = NewObject<USplineMeshComponent>(this);
-	DynamicMesh->SetMobility(EComponentMobility::Static);
+	DynamicMesh->AttachToComponent(Root, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	DynamicMesh->SetMobility(EComponentMobility::Movable);
 	DynamicMesh->SetStaticMesh(Mesh);
 	DynamicMesh->SetMaterial(0, Material);
 	DynamicMesh->RegisterComponent();
@@ -155,4 +166,59 @@ void AStroke::CreateSpline(FVector StartPoint)
 	DynamicMesh->SetVisibility(true);
 	DynamicMeshArray.Add(DynamicMesh);
 }
+```
+---
+## Frame rate in VR & Performance Bottlenecks (2 lectures)
+Each eye have the half of time of framerate to render (90 FPS -> 11 ms -> 5.5 ms per eye)
+To start a game using VR (like Rift), Set in *Project Setting -> Start in VR*, and Unreal in a standalone exe, try to use VR when game is launched.
+
+CPU works in the next frame, meanwhile GPU is drawing the last calculated frame.
+If CPU time is great than GPU, this generate a bottleneck. We must try to have less time in CPU athan GPU.
+
+Unreal use 2 threads, one for game and other for render. This second thread comunicates with GPU in order to draw.
+
+This command shows times of the threads
+```
+stat unit
+```
+To show GPU stadistics or game thread or draw.
+```
+stat gpu
+stat game
+stat sceneRendering
+```
+
+Uses *stat none* to clear stat that you see.
+
+---
+## Performance Optimisation && Reducing DrawCalls with Instancing
+Set in *Project Setting ->Rendering->Forward Shading*.
+
+By default, Unreal Engine 4 (UE4) uses a Deferred Renderer as it provides the most versatility and grants access to more rendering features. However, there are some trade-offs in using the Deferred Renderer that might not be right for all VR experiences. Forward Rendering provides a faster baseline, with faster rendering passes, which may lead to better performance on VR platforms. Not only is Forward Rendering faster, it also provides better anti-aliasing options than the Deferred Renderer, which may lead to better visuals. 
+
+BEWARE ! When you restars editor, it takes its time.
+
+To reduce draw calls, first let's take a look how many DraCalls our game done. In *stat sceneRendering* watch Counters:Mesh draw calls.
+
+To reduce them, Recapping the instanced Static Mesh. A component that efficiently renders multiple instances of the same StaticMesh. In OpenGL, this is an object to put together all triangles in the same VBO.
+```c
+UInstancedStaticMeshComponent
+and use AddInstance and RemoveInstance to draw triangles.
+```
+Replace the Spline Mesh with InstancedStaticMeshComponent
+- Create the Component in C++
+- Add the instance instead of spawning
+
+Eliminate all USplineMeshComponent references and uses.
+
+```c
+	UInstancedStaticMeshComponent * StrokeMeshInstanced;
+
+	StrokeMeshInstanced = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Stroke Mesh"));
+	StrokeMeshInstanced->SetupAttachment(Root);
+
+In AStroke::CreateSpline
+	FTransform TR;
+	TR.SetLocation(StartPoint);
+	StrokeMeshInstanced->AddInstance(TR);
 ```
