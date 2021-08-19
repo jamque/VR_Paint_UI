@@ -28,4 +28,13 @@ private:
 	UInstancedStaticMeshComponent * StrokeMeshInstanced;
 
 	FVector LastLocation;
+
+	FTransform GetNextSegmentTransform(FVector Current) const;
+
+	FVector GetNextSegmentScale(FVector Current) const;
+	FQuat GetNextSegmentRotation(FVector Current) const;
+	FVector GetNextSegmentLocation(FVector Current) const;
+
+
+
 };
