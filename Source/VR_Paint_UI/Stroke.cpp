@@ -15,6 +15,9 @@ AStroke::AStroke()
 	StrokeMeshInstanced = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Stroke Mesh"));
 	StrokeMeshInstanced->SetupAttachment(Root);
 
+	PelotasMeshInstanced = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Pelotas Mesh"));
+	PelotasMeshInstanced->SetupAttachment(Root);
+
 	LastLocation = FVector(0.0f);
 }
 
@@ -23,19 +26,21 @@ void AStroke::Update(FVector CursorLocation)
 	if (LastLocation.IsZero())
 	{
 		LastLocation = CursorLocation;
-		//CreateSpline(CursorLocation);
+		PelotasMeshInstanced->AddInstance(GetNextPelotasTransform(CursorLocation));
+		return;
 	}
 	// Create spline Mesh to manipulate (if you don't have it yet)
-	if (FVector::Distance(LastLocation, CursorLocation) > 2.0f)
-	{
+	//if (FVector::Distance(LastLocation, CursorLocation) > 0.4f)
+	//{
 		CreateSpline(CursorLocation);
 		LastLocation = CursorLocation;
-	}
+	//}
 }
 
 void AStroke::CreateSpline(FVector StartPoint)
 {
 	StrokeMeshInstanced->AddInstance(GetNextSegmentTransform (StartPoint));
+	PelotasMeshInstanced->AddInstance(GetNextPelotasTransform(StartPoint));
 }
 
 FTransform AStroke::GetNextSegmentTransform(FVector Current) const
@@ -47,6 +52,13 @@ FTransform AStroke::GetNextSegmentTransform(FVector Current) const
 	SegmentTransform.SetLocation(GetNextSegmentLocation(Current));
 
 	return SegmentTransform;
+}
+
+FTransform AStroke::GetNextPelotasTransform(FVector Current) const
+{
+	FTransform PT;
+	PT.SetLocation(GetActorTransform().InverseTransformPosition(Current));
+	return PT;
 }
 
 FVector AStroke::GetNextSegmentScale(FVector Current) const

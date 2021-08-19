@@ -27,9 +27,13 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UInstancedStaticMeshComponent * StrokeMeshInstanced;
 
+	UPROPERTY(VisibleAnywhere)
+	UInstancedStaticMeshComponent* PelotasMeshInstanced;
+
 	FVector LastLocation;
 
 	FTransform GetNextSegmentTransform(FVector Current) const;
+	FTransform GetNextPelotasTransform(FVector Current) const;
 
 	FVector GetNextSegmentScale(FVector Current) const;
 	FQuat GetNextSegmentRotation(FVector Current) const;

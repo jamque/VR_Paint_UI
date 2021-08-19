@@ -291,3 +291,49 @@ FVector AStroke::GetNextSegmentLocation(FVector Current) const
 ```
 ---
 ## Instanced Mesh Materials
+Lecture give us two meshes: Cylinder and Sphere
+
+Use Cylinder in Instanced Static Mesh to draw laser
+
+Create a Material, Unlit and with Emissive Color. Use it in Instanced Static Mesh too.
+
+Hide The Joints
+- Create a new instandec staic mesh
+- Use the sphere mesh
+- Spawn to hide the joints
+```c
+//Stroke.h
+	UPROPERTY(VisibleAnywhere)
+	UInstancedStaticMeshComponent* PelotasMeshInstanced;
+	FTransform GetNextPelotasTransform(FVector Current) const;
+
+//Stroke.ccp
+void AStroke::Update(FVector CursorLocation)
+{
+	if (LastLocation.IsZero())
+	{
+		LastLocation = CursorLocation;
+		PelotasMeshInstanced->AddInstance(GetNextPelotasTransform(CursorLocation));
+		return;
+	}
+	// Create spline Mesh to manipulate (if you don't have it yet)
+	//if (FVector::Distance(LastLocation, CursorLocation) > 0.4f)
+	//{
+		CreateSpline(CursorLocation);
+		LastLocation = CursorLocation;
+	//}
+}
+
+void AStroke::CreateSpline(FVector StartPoint)
+{
+	StrokeMeshInstanced->AddInstance(GetNextSegmentTransform (StartPoint));
+	PelotasMeshInstanced->AddInstance(GetNextPelotasTransform(StartPoint));
+}
+
+FTransform AStroke::GetNextPelotasTransform(FVector Current) const
+{
+	FTransform PT;
+	PT.SetLocation(GetActorTransform().InverseTransformPosition(Current));
+	return PT;
+}
+```
