@@ -337,3 +337,91 @@ FTransform AStroke::GetNextPelotasTransform(FVector Current) const
 	return PT;
 }
 ```
+---
+## Saving Game State
+Load and save Strokes
+
+USaveGame is a class from UObject. And Save this savegames into Slots.
+```c
+CreateSaveGameObject
+SaveGameToSlot
+LoadGameFromSlot
+```
+Create a subclass from USaveGame
+
+Create ans Save
+- Implement Create
+- Check it returns something
+- Implement Save
+- Check ir create a file
+```c
+// Declare Public
+UPainterSaveGame* UPainterSaveGame::Create()
+{
+	UPainterSaveGame *P = Cast<UPainterSaveGame>(UGameplayStatics::CreateSaveGameObject(StaticClass()));
+	return P;
+}
+
+bool UPainterSaveGame::Save()
+{
+	return UGameplayStatics::SaveGameToSlot(this, TEXT("partida"), 0);
+}
+```
+---
+## Loading a SaveGame
+How to restore the save files.
+
+Let's setup something to save with an Input Action. And other button to load.
+
+UPROPERTYs in SaveGame Objects, will be used to save in slot.
+
+Use LoadGameFromSlot to load a savegame. Thsi function creates a SaveGame Object itself.
+
+Load Some State
+- Populate a UPROPERTY
+- Setup the loading
+- Check ir restore the data correcty
+- Check it works between reloads
+```c
+// In PainterSaveGame
+
+	UPROPERTY()
+	float dato = 10.0f;
+
+UPainterSaveGame* UPainterSaveGame::Load()
+{
+	return Cast<UPainterSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("partida"), 0));
+}
+
+// In Pawn
+	PlayerInputComponent->BindAction(TEXT("LoadButton"), EInputEvent::IE_Pressed, this, &AVRPawn::Load);
+	PlayerInputComponent->BindAction(TEXT("SaveButton"), EInputEvent::IE_Pressed, this, &AVRPawn::Save);
+
+void AVRPawn::Load()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::White,
+		FString::Printf(TEXT("             ENTRO a LOAD!")));
+	UPainterSaveGame* Painting = UPainterSaveGame::Load();
+	if (Painting)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("CARREGAT! = %f"), Painting->dato);
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,
+			FString::Printf(TEXT("             CARREGAT! = %f"), Painting->dato));
+	}
+}
+
+void AVRPawn::Save()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::White,
+		FString::Printf(TEXT("             ENTRO a SAVE!")));
+	UPainterSaveGame* Painting = UPainterSaveGame::Create();
+	Painting->dato = RightController->GetActorLocation().X;
+	if (Painting->Save())
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Salvat! = %f"), Painting->dato);
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,
+			FString::Printf(TEXT("             Salvat! = %f"), Painting->dato));
+	}
+}
+
+```

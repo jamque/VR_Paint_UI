@@ -9,6 +9,8 @@
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 
+#include "PainterSaveGame.h"
+
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -55,6 +57,8 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), EInputEvent::IE_Pressed, this, &AVRPawn::RightTriggerPressed);
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), EInputEvent::IE_Released, this, &AVRPawn::RightTriggerReleased);
+	PlayerInputComponent->BindAction(TEXT("LoadButton"), EInputEvent::IE_Pressed, this, &AVRPawn::Load);
+	PlayerInputComponent->BindAction(TEXT("SaveButton"), EInputEvent::IE_Pressed, this, &AVRPawn::Save);
 }
 
 void AVRPawn::RightTriggerPressed()
@@ -67,5 +71,32 @@ void AVRPawn::RightTriggerReleased()
 {
 	if (RightController != nullptr)
 		RightController->ButtonRelease();
+}
+
+void AVRPawn::Load()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::White,
+		FString::Printf(TEXT("             ENTRO a LOAD!")));
+	UPainterSaveGame* Painting = UPainterSaveGame::Load();
+	if (Painting)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("CARREGAT! = %f"), Painting->dato);
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,
+			FString::Printf(TEXT("             CARREGAT! = %f"), Painting->dato));
+	}
+}
+
+void AVRPawn::Save()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::White,
+		FString::Printf(TEXT("             ENTRO a SAVE!")));
+	UPainterSaveGame* Painting = UPainterSaveGame::Create();
+	Painting->dato = RightController->GetActorLocation().X;
+	if (Painting->Save())
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Salvat! = %f"), Painting->dato);
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,
+			FString::Printf(TEXT("             Salvat! = %f"), Painting->dato));
+	}
 }
 

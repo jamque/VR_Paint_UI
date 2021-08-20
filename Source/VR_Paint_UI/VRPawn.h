@@ -29,6 +29,9 @@ protected:
 	void RightTriggerPressed();
 	void RightTriggerReleased();
 
+	void Load();
+	void Save();
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* VRRoot;
