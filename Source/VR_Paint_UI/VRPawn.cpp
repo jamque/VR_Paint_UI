@@ -80,9 +80,10 @@ void AVRPawn::Load()
 	UPainterSaveGame* Painting = UPainterSaveGame::Load();
 	if (Painting)
 	{
+		Painting->DeserializeToWorld(GetWorld());
 		//UE_LOG(LogTemp, Warning, TEXT("CARREGAT! = %f"), Painting->dato);
 		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,
-			FString::Printf(TEXT("             CARREGAT! = %f"), Painting->dato));
+			FString::Printf(TEXT("             CARREGAT!")));
 	}
 }
 
@@ -91,12 +92,15 @@ void AVRPawn::Save()
 	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::White,
 		FString::Printf(TEXT("             ENTRO a SAVE!")));
 	UPainterSaveGame* Painting = UPainterSaveGame::Create();
-	Painting->dato = RightController->GetActorLocation().X;
+	if (Painting != nullptr)
+	{
+		Painting->SerializeFromWorld(GetWorld());
+	}
 	if (Painting->Save())
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Salvat! = %f"), Painting->dato);
 		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red,
-			FString::Printf(TEXT("             Salvat! = %f"), Painting->dato));
+			FString::Printf(TEXT("             Salvat!")));
 	}
 }
 

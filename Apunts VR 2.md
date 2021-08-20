@@ -425,3 +425,64 @@ void AVRPawn::Save()
 }
 
 ```
+---
+## Serialising the Game State
+Save and Load a Level.
+
+The State of our level. Our level to save Stroke, just saving Cursorlocation of every instance is enought to regenerate later with Update function all the Stroke. Let's iterate to take all Cursorlocations. 
+
+Contruct UPROPERTY in PainterSaveGame
+```c
+TArray<TSubclassOf<class AStroke>> Strokes;
+```
+
+The SaveGame serialising API.
+```c
+void SerializeFromWorld(const UWorld* World);
+void DeserializeToWorld(Uworld* World);
+```
+In our pawn, when we want to Save, use SerializeFromWorld, and in Load use DeserializeToWorld.
+
+SerializeFromWorld should iterate over all strokes and serialize them, and Store class type.
+
+DeserializeToWorld for all strokes, spawn stroke fo the type. First clear the world.
+
+Capture and Spawn
+- Implement the two methods
+- Check that the strokes disappear
+- Check the outlines for the classes
+- Are they the right number?
+- Are they th right type?
+
+```c
+void UPainterSaveGame::SerializeFromWorld(UWorld* World)
+{
+	Strokes.Empty();
+	for (TActorIterator<AStroke> StrokeIter(World); StrokeIter; ++StrokeIter)
+	{
+		// TO DO : Serialize
+		Strokes.Add(StrokeIter->GetClass());
+	}
+}
+
+void UPainterSaveGame::DeserializeToWorld(UWorld* World)
+{
+	ClearWorld(World);
+	for (TSubclassOf<AStroke> StrokeClass : Strokes)
+	{
+		World->SpawnActor<AStroke>(StrokeClass);
+	}
+}
+
+void UPainterSaveGame::ClearWorld(UWorld* World)
+{
+	for (TActorIterator<AStroke> StrokeIter(World); StrokeIter; ++StrokeIter)
+	{
+		StrokeIter->Destroy();
+	}
+}
+// In Pawn Load
+Painting->DeserializeToWorld(GetWorld());
+// In Pawn Save
+Painting->SerializeFromWorld(GetWorld());
+```

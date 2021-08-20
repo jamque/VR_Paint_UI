@@ -6,6 +6,8 @@
 #include "GameFramework/SaveGame.h"
 #include "PainterSaveGame.generated.h"
 
+class AStroke;
+
 /**
  * 
  */
@@ -19,6 +21,13 @@ public:
 	bool Save();
 	static UPainterSaveGame* Load();
 
-	UPROPERTY()
-	float dato = 10.0f;
+	void SerializeFromWorld(UWorld* World);
+	void DeserializeToWorld(UWorld* World);
+
+private:
+
+	void ClearWorld(UWorld* World);
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<TSubclassOf<AStroke>> Strokes;
 };
