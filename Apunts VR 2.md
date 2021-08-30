@@ -545,3 +545,27 @@ Extract The Hand Controller Stuff
 - Movement should happen in the Base.
 - What need to move up for that?
 - Check painting still works.
+
+## Introduction to vector design
+No programming lesson. Design UI lesson.
+
+Designing Screen Interfaces for VR (Google I/O '17) https://www.youtube.com/watch?v=ES9jArHRFHQ
+
+https://www.figma.com/ to load sketch
+
+### Angular Units
+
+distance independent milimeter = 1 dmm . Angular unit.
+- 1 meter 1 dmm
+- 2 meter 2 dmm
+
+## Understanding Good VR Design
+- Whitespace (=Aire)
+- Consistency (=Coses iguals o relacionades al mateix lloc)
+- Affordance (=A on pot anar tot seguit, en la següent opció)
+- Colour
+- Contrast
+- Format of the medium
+- fitt's Law
+
+
