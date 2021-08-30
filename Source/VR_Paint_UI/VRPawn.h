@@ -9,7 +9,7 @@
 
 //class USceneComponent;
 class UCameraComponent;
-class AVRAController;
+class AHandControllerBase;
 
 UCLASS()
 class VR_PAINT_UI_API AVRPawn : public APawn
@@ -41,12 +41,12 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	AVRAController* LeftController;
+	AHandControllerBase* LeftController;
 
 	UPROPERTY(VisibleAnywhere)
-	AVRAController* RightController;
+	AHandControllerBase* RightController;
 
 protected:
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AVRAController> HandTypeController;
+	TSubclassOf<AHandControllerBase> HandTypeController;
 };

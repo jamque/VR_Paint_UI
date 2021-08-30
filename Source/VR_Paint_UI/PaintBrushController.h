@@ -3,23 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "VRAController.generated.h"
+#include "HandControllerBase.h"
+#include "PaintBrushController.generated.h"
 
-class UMotionControllerComponent;
 class AStroke;
 
 UCLASS()
-class VR_PAINT_UI_API AVRAController : public AActor
+class VR_PAINT_UI_API APaintBrushController : public AHandControllerBase
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AVRAController();
+	APaintBrushController();
 
-	void ButtonPressed();
-	void ButtonRelease();
+	void ButtonPressed() override;
+	void ButtonRelease() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,17 +28,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetHand(FName Hand);
-
 protected:
-	UPROPERTY(VisibleAnywhere)
-	UMotionControllerComponent* MotionController;
-
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMesh* MeshLeft;
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMesh* MeshRight;
-
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AStroke> StrokeToPaint;
 

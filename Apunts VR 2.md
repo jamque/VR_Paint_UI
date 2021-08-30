@@ -526,3 +526,22 @@ Serialise with Structs
 
 *Call update function to recreate Stroke. Do not use CreateSpline, beacuse you need
  previous point*
+---
+## Renaming C++ Base Classes
+UiPointer PaintBrush from HandControllerBase. One for MainMenu, other to paint.
+
+Let's Create a MainMenu from a new Level.
+
+Rename HandController class to PaintBrushController class. And now BP_HandController it doesn't work. You must add this lines to *Config/DefaultEngine.ini*
+```
+[/Script/Engine.Engine]
++ActiveClassRedirects=(OldClassName="OldName", NewClassName="NewName")
+```
+You can remove these sentence after resave BP Asset uasset.
+
+Extract The Hand Controller Stuff
+- Should be able to use Base in VRPawn
+- Can you use virtual methods to help?
+- Movement should happen in the Base.
+- What need to move up for that?
+- Check painting still works.

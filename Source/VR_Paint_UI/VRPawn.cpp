@@ -5,7 +5,7 @@
 
 #include "Components/SceneComponent.h"
 #include "Camera/CameraComponent.h"
-#include "VRAController.h"
+#include "HandControllerBase.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 
@@ -34,14 +34,14 @@ void AVRPawn::BeginPlay()
 
 	if (HandTypeController)
 	{
-		LeftController = GetWorld()->SpawnActor<AVRAController>(HandTypeController);
+		LeftController = GetWorld()->SpawnActor<AHandControllerBase>(HandTypeController);
 		if (LeftController != nullptr)
 		{
 			LeftController->AttachToComponent(VRRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			LeftController->SetOwner(this);
 			LeftController->SetHand(TEXT("Left"));
 		}
-		RightController = GetWorld()->SpawnActor<AVRAController>(HandTypeController);
+		RightController = GetWorld()->SpawnActor<AHandControllerBase>(HandTypeController);
 		if (RightController != nullptr)
 		{
 			RightController->AttachToComponent(VRRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
