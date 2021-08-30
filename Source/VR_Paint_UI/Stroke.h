@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PainterSaveGame.h"
 #include "Stroke.generated.h"
 
 class UInstancedStaticMeshComponent;
@@ -18,6 +19,10 @@ public:
 	AStroke();
 
 	void Update(FVector CursorLocation);
+
+	FStrokeState SerializeToStruct() const;
+	static AStroke* DeserializeFromStruct(UWorld* World, const FStrokeState& StrokeState);
+
 private:
 	void CreateSpline(FVector StartPoint);
 
@@ -31,6 +36,7 @@ private:
 	UInstancedStaticMeshComponent* PelotasMeshInstanced;
 
 	FVector LastLocation;
+	TArray<FVector> Puntets;
 
 	FTransform GetNextSegmentTransform(FVector Current) const;
 	FTransform GetNextPelotasTransform(FVector Current) const;

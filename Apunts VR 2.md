@@ -486,3 +486,43 @@ Painting->DeserializeToWorld(GetWorld());
 // In Pawn Save
 Painting->SerializeFromWorld(GetWorld());
 ```
+---
+## Serialising Actors To Structs
+Let's visualize strokes.
+how to store savedata
+We must take the state of all strokes. List of location of each stroke. We use
+structs to save it.
+```c
+//PainterSvaeGame.h
+USTRUCT()
+struct FStrokeState
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	TSubclassOf<AStroke> Class;
+
+	UPROPERTY()
+	TArray<FVector> ControlPoints;
+};
+
+class
+{
+	UPROPERTY(VisibleAnywhere)
+	TArray<FStrokeState> Strokes;
+}
+```
+Serialise with Structs
+- Implement the two methods
+```c
+	FStrokeState SerializeToStruct() const;
+	static AStroke* DeserializeFromStruct(UWorld* World, const FStrokeState& StrokeState);
+```
+- How will you populate the array?
+- How will you reconstruct the stroke?
+- Test that you can restore a drawing.
+
+*Save ControlPoints in Update function. Create a new Array in Stroke to save them.*
+
+*Call update function to recreate Stroke. Do not use CreateSpline, beacuse you need
+ previous point*

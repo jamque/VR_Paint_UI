@@ -19,6 +19,7 @@ AStroke::AStroke()
 	PelotasMeshInstanced->SetupAttachment(Root);
 
 	LastLocation = FVector(0.0f);
+	Puntets.Empty();
 }
 
 void AStroke::Update(FVector CursorLocation)
@@ -26,6 +27,7 @@ void AStroke::Update(FVector CursorLocation)
 	if (LastLocation.IsZero())
 	{
 		LastLocation = CursorLocation;
+		Puntets.Add(CursorLocation);
 		PelotasMeshInstanced->AddInstance(GetNextPelotasTransform(CursorLocation));
 		return;
 	}
@@ -34,7 +36,26 @@ void AStroke::Update(FVector CursorLocation)
 	//{
 		CreateSpline(CursorLocation);
 		LastLocation = CursorLocation;
+		Puntets.Add(CursorLocation);
 	//}
+}
+
+FStrokeState AStroke::SerializeToStruct() const
+{
+	FStrokeState resultat;
+	resultat.Class = GetClass();
+	resultat.ControlPoints = Puntets;
+	return resultat;
+}
+
+ AStroke* AStroke::DeserializeFromStruct(UWorld* World, const FStrokeState& StrokeState)
+{
+	AStroke* CurrentStroke = World->SpawnActor<AStroke>(StrokeState.Class);
+	for (size_t i = 0; i < StrokeState.ControlPoints.Num(); i++)
+	{
+		CurrentStroke->Update(StrokeState.ControlPoints[i]);
+	}
+	return CurrentStroke;
 }
 
 void AStroke::CreateSpline(FVector StartPoint)

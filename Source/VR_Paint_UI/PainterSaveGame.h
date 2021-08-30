@@ -8,6 +8,18 @@
 
 class AStroke;
 
+USTRUCT()
+struct FStrokeState
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	TSubclassOf<AStroke> Class;
+
+	UPROPERTY()
+	TArray<FVector> ControlPoints;
+};
+
 /**
  * 
  */
@@ -29,5 +41,5 @@ private:
 	void ClearWorld(UWorld* World);
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<TSubclassOf<AStroke>> Strokes;
+	TArray<FStrokeState> Strokes;
 };
