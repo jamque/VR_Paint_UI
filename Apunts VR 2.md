@@ -568,4 +568,25 @@ distance independent milimeter = 1 dmm . Angular unit.
 - Format of the medium
 - fitt's Law
 
+## Desinging User Interface For VR
+
+## Ergonomic 3D UI Layout In Unreal
+Use Deep whan pass from 2D Design to 3D in VR
+
+Main Pannel -> 2.5m -6º The center of the Pannel (-260 mm)
+2nd Pannel -> 2.25m -27º
+
+Create a Place holder widget
+- Widget Blueprint
+Displaying the widget in the scene
+- Create a Blueprint from Actor, name it BP_PaintPicker and put in MainMenu Level at 0,0,0 Location. Add a Player Start Capsule at 0,0,0 too.
+- Placing the widget with Spline like a component in BP_PaintPicker.
+
+Place The Buttons
+- Checkout the design guidelines
+- Place the buttons exactly
+- Make sure they are rotated
+- Make the right scale
+
+Add Component to BP -> Widget call it Buttons
 
