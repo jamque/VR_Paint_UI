@@ -590,3 +590,39 @@ Place The Buttons
 
 Add Component to BP -> Widget call it Buttons
 
+## UI Widget Interaction in 3D
+Create a laser pointer to select elements.
+
+Use Widget interaction component.
+
+Simulate the mouse uses with UI.
+
+First create a button to test with.
+
+- Wrap you Image with Overlay (right clik on image in Hierarchy
+- Add button under Imagen
+- Fill H and V Image
+- Center Button.
+
+Setting up the blueprints
+- Create a BP_UIPointHandController child from UIPointerHandControler (our class In C++)
+- Create a BP_UIVRPawn child from VRPawn (our class In C++)
+- Set BP_UIPointHandController in BP_UIVRPawn
+- Create a new game mode from you C++ class ProjectNameGameModeBase
+- Change Default pawn class to BP_UIVRPawn
+
+Add The InteractionComponent
+- Should be done in the the C++ class
+- Enable the debug line
+- Should highlight the button
+- Can you make it click the button ?
+
+* You need to add "UMG" in Build.cs*
+```c
+PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG" });
+
+```
+
+Button will be hightlighted automatically when Pointer overlap button itself. No need to create a Tick function to check if IsOverInteractableWidget
+
+To click the button, you must simulate to click a key. Use PressPointerKey and ReleasePointerKey with EKeys::LeftMouseButton
