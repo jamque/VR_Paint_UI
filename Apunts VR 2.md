@@ -626,3 +626,22 @@ PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engi
 Button will be hightlighted automatically when Pointer overlap button itself. No need to create a Tick function to check if IsOverInteractableWidget
 
 To click the button, you must simulate to click a key. Use PressPointerKey and ReleasePointerKey with EKeys::LeftMouseButton
+
+## Converting A Design to UMG (Part1)
+Setting up the grid layout
+
+Open UMG and delete all Hiearchy. Put from Palette a Canvas Panel and Uniform Grid Panel. Add as sons 9 SizeBox and Button as son of SizeBox. Choose Row and Column correctly.
+
+Draw 3 GFX for textures normal, hover and press. And add them to Button States as Texture Images.
+
+L'examen d'interficie AQUÍ es collunut !
+
+## Converting A Design to UMG (Part2)
+Creation the action bar widget
+
+Laying out the buttons. Center in a new UMG BP, center and add image to buttons.
+
+Draw 3 GFX for textures normal, hover and press. And add them to Button States as Texture Images. Add Icon in image over button.
+
+## Converting A Design to UMG (Part3)
+Dots under grid
