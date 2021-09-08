@@ -645,3 +645,26 @@ Draw 3 GFX for textures normal, hover and press. And add them to Button States a
 
 ## Converting A Design to UMG (Part3)
 Dots under grid
+
+## Binding UPROPERTY to UMG
+UMG-> C++
+- Add base class and reparent WBP_PaintingGrid
+Create a C++ PaintingGrid class parent:UserWidget. Go to WBP_PaintingGrid and in Graph->Icon Class Setting, reparent to our class.
+- Bind the Uniform Grid Panel
+```c
+	UPROPERTY(BlueprintReadonly, VisibleAnywhere, meta = (BindWidget))
+	// Look for a component of the widget with the same VAR name and type
+	UUniformGridPanel* PaintingGrid;
+```
+Go to BP UMG and change UniformGridPanel name to PaintingGrid (with or without space)
+-Create a BP interface to "AddPainting" and call it.
+
+### Calling AddPainting
+- Make if callable from Blueprint. Call from the PaintingPicker BP
+```c
+public:
+	UFUNCTION(BlueprintCallable)
+	void AddPainting();
+```
+- Check the pointer PaintingGrid.
+- Print something to check the reference.
