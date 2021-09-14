@@ -25,4 +25,8 @@ protected:
 	UPROPERTY(BlueprintReadonly, VisibleAnywhere, meta = (BindWidget))
 	// Look for a component of the widget with the same VAR name and type
 	UUniformGridPanel* PaintingGrid;
+
+private:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> GridCardClass;
 };

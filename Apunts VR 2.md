@@ -668,3 +668,45 @@ public:
 ```
 - Check the pointer PaintingGrid.
 - Print something to check the reference.
+
+## Spawning Widgets In C++
+Contruct Widgets Component from C++ in PaintingPicker class
+
+Create a new widget in class
+
+```c
+CreateWidget // It's a template
+// In UUniformGridPanel
+GetChillAt()
+AddChild()
+```
+
+### Creating a card Widget
+-Create a BP Widget and call it WBP_PaintingGridCard. Edit. Delete Canvas Panel and add a button equal as buttons in WBP_PaintingGrid
+- Delete all buttons in WBP_PaintingGrid. Leace Size Box
+- We are going to populate all panel using CreateWidget template in AddPainting function. But we need a class.
+
+Add To the First SizeBox
+- Get the first child
+- Cast to SizeBox
+- Add a child to id
+- Test we have one card
+
+```c
+void UPaintingGrid::AddPainting()
+{
+	if (PaintingGrid)
+	{
+		if (GridCardClass)
+		{
+			UUserWidget* NewWid = CreateWidget<UUserWidget>(GetWorld(), GridCardClass);
+			UWidget *Fill = PaintingGrid->GetChildAt(0);
+			USizeBox *Caixa = Cast<USizeBox>(Fill);
+			if (Caixa)
+			{
+				Caixa->AddChild(NewWid);
+			}
+		}
+	}
+}
+```

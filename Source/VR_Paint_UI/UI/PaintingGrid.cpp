@@ -2,12 +2,21 @@
 
 
 #include "PaintingGrid.h"
+#include "Components/SizeBox.h"
 
 void UPaintingGrid::AddPainting()
 {
 	if (PaintingGrid)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green,
-			FString::Printf(TEXT("                               S'HA CRIDAT")));
+		if (GridCardClass)
+		{
+			UUserWidget* NewWid = CreateWidget<UUserWidget>(GetWorld(), GridCardClass);
+			UWidget *Fill = PaintingGrid->GetChildAt(0);
+			USizeBox *Caixa = Cast<USizeBox>(Fill);
+			if (Caixa)
+			{
+				Caixa->AddChild(NewWid);
+			}
+		}
 	}
 }
